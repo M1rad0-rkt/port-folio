@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { ExternalLink, Github, ArrowUpRight, Circle } from 'lucide-react';
 
-const CATEGORIES = ['Tous', 'Web', 'Data & IA', 'Mobile & Jeux'];
+const CATEGORIES = ['Tous', 'Web', 'Data & IA', 'Mobile & Jeux', 'Logiciel'];
 
 const projects = [
   {
@@ -15,12 +15,21 @@ const projects = [
     featured: true,
   },
   {
-    title: 'Systeme de recommandation de lieux',
-    description: "Système intelligent qui suggère des destinations personnalisées à partir des préférences utilisateurs.",
+    title: 'Assistant IA de Règlementation de l\'ARMP',
+    description: "Système intelligent qui gère les textes qui entourent les Marchés Publics.",
     image: '/coming.jpg',
-    tags: ['Python', 'Machine Learning', 'Scikit-learn'],
+    tags: ['Python', 'RAG + LLM', 'NLP'],
     category: 'Data & IA',
     github: '#',
+    demo: '#',
+  },
+  {
+    title: 'Tera-project',
+    description: "Projet de data sur l\'analyse de la qualité de l'air à Fianarantsoa",
+    image: '/tera.jpg',
+    tags: ['Python :', 'numpy', 'pandas', 'streamlint', 'matplotlib'],
+    category: 'Data & IA',
+    github: 'https://github.com/M1rad0-rkt/Tera-project.git',
     demo: '#',
   },
   {
@@ -33,14 +42,13 @@ const projects = [
     demo: '#',
   },
   {
-    title: "Plateforme d'apprentissage de langue assistée par l'IA",
-    description: "Application d'apprentissage des langues personnalisée grâce à l'IA (en cours).",
-    image: '/coming.jpg',
-    tags: ['Python', 'IA', 'NLP'],
+    title: "Rice-disease-detection",
+    description: "Application de détection  de maladie du riz par vision artificielle",
+    image: '/rice_disease.jpg',
+    tags: ['Python', 'Pytorch', 'kaggle', 'Gradio'],
     category: 'Data & IA',
-    github: '#',
+    github: 'https://github.com/AndyFaneva/RNAProject.git',
     demo: '#',
-    inProgress: true,
   },
   {
     title: 'Rezerveo',
@@ -52,12 +60,12 @@ const projects = [
     demo: '#',
   },
   {
-    title: 'Gestion de matériel informatique',
-    description: "Application de gestion et de suivi du matériel informatique.",
-    image: '/coming.jpg',
-    tags: ['PHP', 'MySQL'],
-    category: 'Web',
-    github: '#',
+    title: 'GymGest',
+    description: "Application de gestion et de suivi d'un salle de sport'.",
+    image: '/gym.jpg',
+    tags: ['Python', 'Inno_setup'],
+    category: 'Logiciel',
+    github: 'https://github.com/M1rad0-rkt/Gym_gest.git',
     demo: '#',
   },
   {
