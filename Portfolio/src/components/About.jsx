@@ -40,50 +40,26 @@ export default function About({ darkMode }) {
         <div className="grid lg:grid-cols-12 gap-16 items-center">
 
           {/* Colonne photo */}
-          <div className="lg:col-span-5 relative flex justify-center">
-            <div className="relative w-72 sm:w-80">
-              {/* Cadre pointillé décalé */}
-              <div className="absolute -inset-4 border-2 border-dashed border-blue-500/40 rounded-[2rem] rotate-3"></div>
-
-              {/* Photo */}
-              <div className="relative rounded-[1.75rem] overflow-hidden shadow-2xl -rotate-2 hover:rotate-0 transition-transform duration-500">
+          <div className="lg:col-span-5 flex justify-center">
+            <div className="w-72 sm:w-80">
+              <div
+                className={`rounded-2xl overflow-hidden border ${
+                  darkMode ? 'border-gray-800' : 'border-gray-200'
+                } shadow-lg`}
+              >
                 <div
                   className="w-full aspect-[4/5] bg-cover bg-center"
                   style={{ backgroundImage: "url('/mirado1.jpg')" }}
                 ></div>
-                <div
-                  className={`absolute inset-0 ${
-                    darkMode
-                      ? 'bg-gradient-to-t from-gray-950/70 via-transparent to-transparent'
-                      : 'bg-gradient-to-t from-gray-900/20 via-transparent to-transparent'
-                  }`}
-                ></div>
               </div>
 
-              {/* Badge nom flottant */}
-              <div
-                className={`absolute -bottom-6 -right-6 flex items-center gap-3 px-5 py-3 rounded-2xl shadow-xl backdrop-blur-sm ${
-                  darkMode ? 'bg-gray-900/90 border border-gray-800' : 'bg-white/90 border border-gray-100'
-                }`}
-              >
-                <span className="relative flex h-2.5 w-2.5">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
-                </span>
-                <div>
-                  <p className={`text-sm font-bold leading-tight ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-                    Mirado
-                  </p>
-                  <p className="text-xs text-gray-500 leading-tight">Data Scientist</p>
-                </div>
-              </div>
-
-              {/* Étiquette flottante */}
-              <div
-                className="absolute -top-5 -left-5 flex items-center gap-2 px-4 py-2 rounded-full shadow-lg text-xs font-semibold bg-blue-600 text-white"
-              >
-                <Sparkles size={14} />
-                Mirado
+              <div className="mt-4">
+                <p className={`text-base font-semibold ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                  Mirado
+                </p>
+                <p className="text-sm text-gray-500">
+                  Étudiant M1 Data & IA · EMIT Fianarantsoa
+                </p>
               </div>
             </div>
           </div>
@@ -99,36 +75,33 @@ export default function About({ darkMode }) {
             </span>
 
             <h2
-              className={`text-4xl sm:text-5xl font-bold leading-tight mb-6 ${
-                darkMode ? 'text-white' : 'text-gray-900'
-              }`}
-            >
-              De l'économétrie{' '}
-              <span className="bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent">
-                à la data science
-              </span>
-            </h2>
+            className={`text-4xl sm:text-5xl font-bold leading-tight mb-6 ${
+              darkMode ? 'text-white' : 'text-gray-900'
+            }`}
+          >
+            Data Scientist,{' '}
+          </h2>
 
-            <p
-              className={`text-lg mb-5 leading-relaxed ${
-                darkMode ? 'text-gray-400' : 'text-gray-600'
-              }`}
-            >
-              Étudiant en M1 Data & Intelligence Artificielle, je m'appuie sur une
-              base solide en économétrie pour construire des solutions data qui ont
-              du sens : pipelines ETL, modèles de machine learning et analyses qui
-              transforment des données brutes en décisions concrètes.
-            </p>
-            <p
-              className={`text-lg mb-10 leading-relaxed ${
-                darkMode ? 'text-gray-400' : 'text-gray-600'
-              }`}
-            >
-              Curieux et rigoureux, j'aime comprendre les problèmes en profondeur
-              avant de coder — de la préparation des données jusqu'au déploiement
-              de modèles, en passant par la conception de pipelines fiables et
-              scalables.
-            </p>
+          <p
+            className={`text-lg mb-5 leading-relaxed ${
+              darkMode ? 'text-gray-400' : 'text-gray-600'
+            }`}
+          >
+            Étudiant en M1 Data & Intelligence Artificielle à l'EMIT, je m'appuie sur
+            une base solide en économétrie et en statistiques appliquées pour concevoir
+            des solutions d'IA qui ont du sens : modèles de machine learning et de deep
+            learning, pipelines ETL et applications full-stack qui transforment des
+            données brutes en décisions concrètes.
+          </p>
+          <p
+            className={`text-lg mb-10 leading-relaxed ${
+              darkMode ? 'text-gray-400' : 'text-gray-600'
+            }`}
+          >
+              Curieux et rigoureux, j'aime comprendre les problèmes en profondeur avant de coder — 
+              de la préparation des données jusqu'au déploiement de modèles, en passant par la 
+              conception de pipelines fiables et scalables.
+          </p>
 
             {/* Stats */}
             <div className="grid grid-cols-3 gap-4 mb-10">
