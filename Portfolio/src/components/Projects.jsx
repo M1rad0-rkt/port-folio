@@ -25,7 +25,7 @@ const projects = [
   },
   {
     title: 'Tera-project',
-    description: "Projet de data sur l\'analyse de la qualité de l'air à Fianarantsoa",
+    description: "Projet d\'analyse de donnée sur la qualité de l'air à Fianarantsoa",
     image: '/tera.jpg',
     tags: ['Python :', 'numpy', 'pandas', 'streamlint', 'matplotlib'],
     category: 'Data & IA',
@@ -34,7 +34,7 @@ const projects = [
   },
   {
     title: 'Chatbot IA',
-    description: "Chatbot intelligent basé sur le traitement du langage naturel.",
+    description: "Chatbot intelligent qui aide à l'utilisation et les démarches d'inscription des sites de l\'ARMP",
     image: '/coming.jpg',
     tags: ['Python', 'TensorFlow', 'NLP'],
     category: 'Data & IA',

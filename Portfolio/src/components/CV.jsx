@@ -11,6 +11,13 @@ import {
 
 const experiences = [
   {
+    title: 'Stagiaire projet',
+    company: 'Autorités de Régulation des Marchés Publics sous tutelle de la Ministère de l\'économie et de la finance',
+    period: 'en cours',
+    description: 'Mise en place d\'un assistant de règlementation de l\'ARMP & Chatbot de suivi sur l\'utilisation des sites',
+    icon: Code2,
+  },
+  {
     title: 'Ideathon — Orange Digital Center & Ingedata',
     company: 'Data Challenge Inter-universitaire',
     period: '2026',
@@ -58,7 +65,7 @@ const education = [
     degree: 'Licence en Informatique',
     school: 'Université FJKM Ravelojaona Ampandrana',
     period: '2022 - 2025',
-    description: 'Obtention de la Licence en Informatique.',
+    description: 'Obtention de la Licence en Informatique général.',
   },
   {
     degree: 'Baccalauréat Série D',

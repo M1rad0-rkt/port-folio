@@ -20,9 +20,9 @@ export default function Hero({ darkMode }) {
       <div className="absolute inset-0 bg-gradient-to-b from-black/65 via-black/70 to-black/80"></div>
 
       <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
-        <div className="mb-6 inline-flex items-center gap-2 px-4 py-1.5 bg-white/10 backdrop-blur-md rounded-full border border-white/20 text-sm">
+        {/* <div className="mb-6 inline-flex items-center gap-2 px-4 py-1.5 bg-white/10 backdrop-blur-md rounded-full border border-white/20 text-sm">
           Disponible pour un stage
-        </div>
+        </div> */}
 
         <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-white leading-none tracking-tighter mb-6">
           RAKOTONIAINA Mirado

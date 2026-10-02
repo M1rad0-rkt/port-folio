@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Mail, Phone, MapPin, Github, Linkedin, Send, Sparkles } from 'lucide-react';
+import { Mail, Phone, MapPin, Github, Linkedin, Send, Sparkles, Facebook } from 'lucide-react';
 
 export default function Contact({ darkMode }) {
   const [formData, setFormData] = useState({
@@ -33,6 +33,7 @@ export default function Contact({ darkMode }) {
   const socials = [
     { icon: Github, name: 'GitHub', link: 'https://github.com/M1rad0-rkt' },
     { icon: Linkedin, name: 'LinkedIn', link: 'https://www.linkedin.com/in/mirado-rakotoniaina-978523346' },
+    { icon: Facebook, name: 'Facebook', link: 'https://facebook.com/mirado.rakotoniaina.2025' },
   ];
 
   return (

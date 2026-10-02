@@ -10,6 +10,7 @@ const passions = [
 
 const stats = [
   { value: '3+', label: 'Projets data & ML' },
+  { value: '2+', label: 'Chatbot & RAG' },
   { value: '5+', label: 'Outils & frameworks IA' },
   { value: '1', label: 'Ideathon (Orange Digital Center)' },
 ];
@@ -82,7 +83,7 @@ export default function About({ darkMode }) {
                 className="absolute -top-5 -left-5 flex items-center gap-2 px-4 py-2 rounded-full shadow-lg text-xs font-semibold bg-blue-600 text-white"
               >
                 <Sparkles size={14} />
-                Disponible pour un stage
+                Mirado
               </div>
             </div>
           </div>

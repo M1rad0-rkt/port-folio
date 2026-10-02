@@ -16,8 +16,8 @@ const skillCategories = [
   {
     icon: LineChart,
     title: 'Data science',
-    level: 'Analyse & ML',
-    skills: ['Pandas', 'NumPy', 'Matplotlib', 'Scikit-learn'],
+    level: 'Analyse de données / Machine Learning & Deep Learning',
+    skills: ['Pandas', 'NumPy', 'Matplotlib', 'Scikit-learn', 'Pytorch', 'NLP' ,'LLM'],
   },
   {
     icon: Database,
@@ -29,13 +29,13 @@ const skillCategories = [
     icon: BarChart4,
     title: 'Business Intelligence',
     level: 'Pipelines & reporting',
-    skills: ['ETL', 'Power BI (notions)'],
+    skills: ['ETL / ELT', 'Power BI'],
   },
   {
     icon: Layers,
     title: 'Outils',
     level: 'Environnement de travail',
-    skills: ['Git / GitHub', 'Jupyter Notebook', 'Docker'],
+    skills: ['Git / GitHub', 'Trello', 'Docker'],
   },
 ];
 
