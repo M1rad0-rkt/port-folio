@@ -2,31 +2,37 @@ import { useState, useEffect } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import About from './components/About';
+import Skills from './components/meskills';
 import Projects from './components/Projects';
 import CV from './components/CV';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
-import Skills from './components/meskills';
+import Chatbot from './components/Chatbot';
+import CursorPython from './components/CursorPython';
 
 function App() {
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(true);
 
   useEffect(() => {
-    const savedMode = localStorage.getItem('darkMode');
-    if (savedMode) {
-      setDarkMode(savedMode === 'true');
+    const saved = localStorage.getItem('darkMode');
+    if (saved !== null) {
+      setDarkMode(saved === 'true');
     }
   }, []);
 
   const toggleDarkMode = () => {
-    const newMode = !darkMode;
-    setDarkMode(newMode);
-    localStorage.setItem('darkMode', String(newMode));
+    const next = !darkMode;
+    setDarkMode(next);
+    localStorage.setItem('darkMode', String(next));
   };
 
   return (
     <div className={darkMode ? 'dark' : ''}>
-      <div className="min-h-screen">
+      <div
+        className={`min-h-screen ${
+          darkMode ? 'bg-diagonal-dark text-gray-100' : 'bg-diagonal-light text-gray-900'
+        }`}
+      >
         <Navbar darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
         <Hero darkMode={darkMode} />
         <About darkMode={darkMode} />
@@ -35,6 +41,8 @@ function App() {
         <CV darkMode={darkMode} />
         <Contact darkMode={darkMode} />
         <Footer darkMode={darkMode} />
+        <Chatbot darkMode={darkMode} />
+        <CursorPython />
       </div>
     </div>
   );

@@ -6,9 +6,7 @@ export default function Navbar({ darkMode, toggleDarkMode }) {
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 40);
-    };
+    const handleScroll = () => setScrolled(window.scrollY > 40);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -24,6 +22,7 @@ export default function Navbar({ darkMode, toggleDarkMode }) {
   const navItems = [
     { name: 'Accueil', id: 'home' },
     { name: 'À propos', id: 'about' },
+    { name: 'Compétences', id: 'meskills' },
     { name: 'Projets', id: 'projects' },
     { name: 'Parcours', id: 'cv' },
     { name: 'Contact', id: 'contact' },
@@ -34,81 +33,62 @@ export default function Navbar({ darkMode, toggleDarkMode }) {
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled
           ? darkMode
-            ? 'bg-gray-950/95 backdrop-blur-md border-b border-gray-800'
-            : 'bg-white/95 backdrop-blur-md border-b border-gray-100'
+            ? 'bg-black/90 backdrop-blur-md border-b border-gray-800'
+            : 'bg-white/90 backdrop-blur-md border-b border-gray-200'
           : 'bg-transparent'
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          {/* Logo */}
           <button
             onClick={() => scrollToSection('home')}
-            className={`text-2xl font-bold tracking-tight transition-colors ${
+            className={`text-xl font-bold tracking-tight ${
               darkMode ? 'text-white' : 'text-gray-900'
             }`}
           >
             RAKOTONIAINA
           </button>
 
-          {/* Navigation Desktop */}
-          <div className="hidden md:flex items-center gap-8">
+          <div className="hidden md:flex items-center gap-6">
             {navItems.map((item) => (
               <button
                 key={item.id}
                 onClick={() => scrollToSection(item.id)}
-                className={`font-medium transition-colors hover:text-blue-600 ${
-                  darkMode ? 'text-gray-300 hover:text-white' : 'text-gray-700'
+                className={`text-sm font-medium transition-colors ${
+                  darkMode ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'
                 }`}
               >
                 {item.name}
               </button>
             ))}
-
-            {/* Toggle Dark Mode */}
             <button
               onClick={toggleDarkMode}
-              className={`p-2.5 rounded-xl transition-all hover:bg-gray-100 dark:hover:bg-gray-800 ${
-                darkMode ? 'text-yellow-400' : 'text-gray-700'
-              }`}
+              className={`p-2 rounded-lg ${darkMode ? 'text-yellow-400' : 'text-gray-600'}`}
             >
-              {darkMode ? <Sun size={20} /> : <Moon size={20} />}
+              {darkMode ? <Sun size={18} /> : <Moon size={18} />}
             </button>
           </div>
 
-          {/* Mobile Menu Button */}
-          <div className="md:hidden flex items-center gap-3">
-            <button
-              onClick={toggleDarkMode}
-              className={`p-2.5 rounded-xl transition-all ${
-                darkMode ? 'text-yellow-400' : 'text-gray-700'
-              }`}
-            >
-              {darkMode ? <Sun size={20} /> : <Moon size={20} />}
+          <div className="md:hidden flex items-center gap-2">
+            <button onClick={toggleDarkMode} className={darkMode ? 'text-yellow-400' : 'text-gray-600'}>
+              {darkMode ? <Sun size={18} /> : <Moon size={18} />}
             </button>
-
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              className={`p-2.5 ${darkMode ? 'text-white' : 'text-gray-900'}`}
-            >
-              {isOpen ? <X size={26} /> : <Menu size={26} />}
+            <button onClick={() => setIsOpen(!isOpen)} className={darkMode ? 'text-white' : 'text-gray-900'}>
+              {isOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
           </div>
         </div>
       </div>
 
-      {/* Menu Mobile */}
       {isOpen && (
-        <div className={`md:hidden border-t ${darkMode ? 'bg-gray-950 border-gray-800' : 'bg-white border-gray-100'}`}>
-          <div className="px-4 py-6 space-y-1">
+        <div className={`md:hidden border-t ${darkMode ? 'bg-black border-gray-800' : 'bg-white border-gray-200'}`}>
+          <div className="px-4 py-4 space-y-1">
             {navItems.map((item) => (
               <button
                 key={item.id}
                 onClick={() => scrollToSection(item.id)}
-                className={`block w-full text-left px-5 py-4 rounded-2xl text-lg font-medium transition-all ${
-                  darkMode
-                    ? 'text-gray-300 hover:bg-gray-900 hover:text-white'
-                    : 'text-gray-700 hover:bg-gray-100 hover:text-blue-600'
+                className={`block w-full text-left px-4 py-3 rounded-lg text-sm font-medium ${
+                  darkMode ? 'text-gray-300 hover:bg-gray-900' : 'text-gray-700 hover:bg-gray-100'
                 }`}
               >
                 {item.name}
