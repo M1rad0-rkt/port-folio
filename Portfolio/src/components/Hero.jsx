@@ -9,109 +9,164 @@ const focusRing =
 const reducedMotion = () =>
   typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-// Les quatre repères d'angle du cadre.
-const corners = [
-  'left-4 top-4 rounded-tl-lg border-l-2 border-t-2',
-  'right-4 top-4 rounded-tr-lg border-r-2 border-t-2',
-  'bottom-4 left-4 rounded-bl-lg border-b-2 border-l-2',
-  'bottom-4 right-4 rounded-br-lg border-b-2 border-r-2',
+// Lignes affichées dans le terminal (cycle en boucle)
+const TERMINAL_LINES = [
+  { type: 'prompt', text: 'mirado@portfolio:~$' },
+  { type: 'cmd', text: ' whoami' },
+  { type: 'out', text: 'Rakotoniaina Mirado' },
+  { type: 'prompt', text: 'mirado@portfolio:~$' },
+  { type: 'cmd', text: ' cat skills.txt' },
+  { type: 'out', text: 'Python · PyTorch · SQL' },
+  { type: 'out', text: 'React · Django · FastAPI' },
+  { type: 'prompt', text: 'mirado@portfolio:~$' },
+  { type: 'cmd', text: ' ./status.sh' },
+  { type: 'out', text: 'M1 Data & IA — EMIT' },
+  { type: 'out', text: 'Open to internships ✓' },
+  { type: 'prompt', text: 'mirado@portfolio:~$' },
+  { type: 'cmd', text: ' echo "Hello, world"' },
+  { type: 'out', text: 'Hello, world' },
 ];
 
-// Logo Python dans un cadre : il flotte doucement en oscillant, son ombre suit le
-// mouvement, et il s'incline légèrement vers la souris quand elle survole le cadre.
-function PythonFrame() {
-  const floatRef = useRef(null);
-  const shadowRef = useRef(null);
-  const [tilt, setTilt] = useState({ x: 0, y: 0 });
+function TerminalFrame() {
+  const [visibleCount, setVisibleCount] = useState(0);
+  const [charIndex, setCharIndex] = useState(0);
+  const [cycle, setCycle] = useState(0);
+  const bottomRef = useRef(null);
 
-  // Flottement continu, coupé si le visiteur a demandé moins d'animations.
+  useEffect(() => {
+    if (reducedMotion()) {
+      setVisibleCount(TERMINAL_LINES.length);
+      setCharIndex(999);
+      return undefined;
+    }
+
+    // Reset au début de chaque cycle
+    setVisibleCount(0);
+    setCharIndex(0);
+  }, [cycle]);
+
   useEffect(() => {
     if (reducedMotion()) return undefined;
-    const timing = { duration: 3600, iterations: Infinity, direction: 'alternate', easing: 'ease-in-out' };
-    const animations = [
-      floatRef.current.animate(
-        [
-          { transform: 'translateY(-7px) rotate(-3deg)' },
-          { transform: 'translateY(7px) rotate(3deg)' },
-        ],
-        timing
-      ),
-      // Plus le logo descend, plus l'ombre est large et sombre.
-      shadowRef.current.animate(
-        [
-          { transform: 'scaleX(0.8)', opacity: 0.5 },
-          { transform: 'scaleX(1.05)', opacity: 1 },
-        ],
-        timing
-      ),
-    ];
-    return () => animations.forEach((animation) => animation.cancel());
-  }, []);
 
-  const onPointerMove = (e) => {
-    if (e.pointerType === 'touch' || reducedMotion()) return;
-    const box = e.currentTarget.getBoundingClientRect();
-    setTilt({
-      x: (e.clientX - box.left) / box.width - 0.5,
-      y: (e.clientY - box.top) / box.height - 0.5,
-    });
-  };
+    const line = TERMINAL_LINES[visibleCount];
+    if (!line) {
+      const t = setTimeout(() => setCycle((c) => c + 1), 2200);
+      return () => clearTimeout(t);
+    }
+
+    const full = (line.type === 'cmd' ? line.text : line.type === 'prompt' ? line.text : line.text) || '';
+    const isTyping = line.type === 'cmd';
+
+    if (isTyping && charIndex < full.length) {
+      const t = setTimeout(() => setCharIndex((c) => c + 1), 45 + Math.random() * 35);
+      return () => clearTimeout(t);
+    }
+
+    // Ligne terminée → passer à la suivante
+    const delay = line.type === 'out' ? 280 : line.type === 'prompt' ? 200 : 500;
+    const t = setTimeout(() => {
+      setVisibleCount((v) => v + 1);
+      setCharIndex(0);
+    }, delay);
+    return () => clearTimeout(t);
+  }, [visibleCount, charIndex, cycle]);
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }, [visibleCount, charIndex]);
+
+  const rendered = TERMINAL_LINES.slice(0, visibleCount + 1);
 
   return (
     <div
-      onPointerMove={onPointerMove}
-      onPointerLeave={() => setTilt({ x: 0, y: 0 })}
-      className="relative mx-auto aspect-square w-full max-w-sm rounded-3xl border border-gray-200 bg-white/70 shadow-sm dark:border-gray-800 dark:bg-gray-900/70"
+      className="relative mx-auto w-full max-w-sm overflow-hidden rounded-2xl border border-gray-800 bg-[#0c0c0c] shadow-2xl shadow-black/40"
+      aria-label="Terminal de démonstration"
     >
-      {corners.map((position) => (
-        <span
-          key={position}
-          aria-hidden="true"
-          className={`absolute size-6 border-blue-600/70 dark:border-blue-400/70 ${position}`}
-        />
-      ))}
+      {/* Barre de titre */}
+      <div className="flex items-center gap-2 border-b border-gray-800 bg-[#161616] px-3.5 py-2.5">
+        <span className="size-2.5 rounded-full bg-[#ff5f56]" aria-hidden="true" />
+        <span className="size-2.5 rounded-full bg-[#ffbd2e]" aria-hidden="true" />
+        <span className="size-2.5 rounded-full bg-[#27c93f]" aria-hidden="true" />
+        <span className="ml-2 flex-1 truncate text-center font-mono text-[10px] text-gray-500">
+          mirado — zsh — 80×24
+        </span>
+      </div>
 
-      <div className="absolute inset-0 grid place-items-center">
-        <div
-          className="flex flex-col items-center"
-          style={{
-            transform: `perspective(700px) rotateX(${-tilt.y * 12}deg) rotateY(${tilt.x * 12}deg) translate(${tilt.x * 10}px, ${tilt.y * 10}px)`,
-            transition: 'transform 200ms ease-out',
-          }}
-        >
-          <div ref={floatRef}>
-            <svg
-              viewBox="0 0 256 255"
-              xmlns="http://www.w3.org/2000/svg"
-              role="img"
-              aria-label="Logo Python"
-              className="size-32 sm:size-40"
-            >
-              <path
-                fill="#3776AB"
-                d="M126.916.072c-64.832 0-60.784 28.115-60.784 28.115l.072 29.128h61.868v8.745H41.631S.145 61.355.145 126.77c0 65.415 36.21 63.097 36.21 63.097h21.61v-30.336s-1.165-36.21 35.632-36.21h61.401s34.401.522 34.401-33.323V33.61S199.378.072 126.916.072z"
-              />
-              <path
-                fill="#FFD43B"
-                d="M128.757 254.126c64.832 0 60.784-28.115 60.784-28.115l-.072-29.128H127.6v-8.745h86.441s41.486 4.705 41.486-60.71c0-65.416-36.21-63.097-36.21-63.097h-21.61v30.336s1.165 36.21-35.632 36.21h-61.401s-34.401-.523-34.401 33.322v56.572s-5.235 33.355 67.227 33.355z"
-              />
-              <circle cx="85.5" cy="42" r="12" fill="#fff" />
-              <circle cx="170" cy="212" r="12" fill="#fff" />
-            </svg>
-          </div>
-          <div
-            ref={shadowRef}
-            aria-hidden="true"
-            className="mt-9 h-3 w-24 rounded-full bg-gray-900/15 blur-sm dark:bg-black/70"
-          />
-        </div>
+      {/* Corps */}
+      <div className="h-64 overflow-hidden p-4 font-mono text-[12px] leading-relaxed sm:h-72 sm:text-[13px]">
+        {rendered.map((line, i) => {
+          const isCurrent = i === visibleCount;
+          const isCmd = line.type === 'cmd';
+          const isPrompt = line.type === 'prompt';
+          const isOut = line.type === 'out';
+
+          let display = line.text;
+          if (isCurrent && isCmd) {
+            display = line.text.slice(0, charIndex);
+          }
+          if (isPrompt && isCurrent) {
+            // prompt apparaît d'un coup
+            display = line.text;
+          }
+          if (isOut && isCurrent) {
+            display = line.text;
+          }
+
+          // Ne pas afficher les lignes futures
+          if (i > visibleCount) return null;
+
+          // Prompt + cmd sur la même ligne visuelle quand cmd suit
+          if (isPrompt) {
+            const next = TERMINAL_LINES[i + 1];
+            const showCmdOnSameLine = next?.type === 'cmd' && (i + 1 < visibleCount || (i + 1 === visibleCount));
+            if (showCmdOnSameLine && i + 1 === visibleCount) {
+              const cmdText = next.text.slice(0, charIndex);
+              return (
+                <div key={`${cycle}-${i}`} className="flex flex-wrap">
+                  <span className="text-emerald-400">{line.text}</span>
+                  <span className="text-gray-100">
+                    {cmdText}
+                    <span className="ml-0.5 inline-block h-3.5 w-1.5 animate-pulse bg-emerald-400 align-middle" />
+                  </span>
+                </div>
+              );
+            }
+            if (showCmdOnSameLine && i + 1 < visibleCount) {
+              return (
+                <div key={`${cycle}-${i}`}>
+                  <span className="text-emerald-400">{line.text}</span>
+                  <span className="text-gray-100">{next.text}</span>
+                </div>
+              );
+            }
+            return (
+              <div key={`${cycle}-${i}`}>
+                <span className="text-emerald-400">{line.text}</span>
+                {isCurrent && (
+                  <span className="ml-0.5 inline-block h-3.5 w-1.5 animate-pulse bg-emerald-400 align-middle" />
+                )}
+              </div>
+            );
+          }
+
+          if (isCmd) {
+            // déjà géré avec le prompt précédent
+            return null;
+          }
+
+          return (
+            <div key={`${cycle}-${i}`} className="text-gray-400">
+              {display}
+            </div>
+          );
+        })}
+        <div ref={bottomRef} />
       </div>
     </div>
   );
 }
 
 export default function Hero() {
-  // Seule animation de la page : un fondu à l'arrivée, texte puis cadre.
   const [ready, setReady] = useState(false);
   useEffect(() => {
     const id = requestAnimationFrame(() => setReady(true));
@@ -147,7 +202,7 @@ export default function Hero() {
           <p className="mt-1 text-gray-500 dark:text-gray-400">EMIT Fianarantsoa, Madagascar</p>
 
           <p className="mt-6 max-w-lg text-lg leading-relaxed text-gray-600 dark:text-gray-400">
-            Formé à l’économétrie, je conçois des modèles de machine learning, des pipelines de
+            Formé à l&apos;économétrie, je conçois des modèles de machine learning, des pipelines de
             données et des applications web.
           </p>
 
@@ -195,7 +250,7 @@ export default function Hero() {
         </div>
 
         <div className={`mx-auto w-full max-w-md lg:col-span-5 lg:mx-0 ${reveal('delay-200')}`}>
-          <PythonFrame />
+          <TerminalFrame />
         </div>
       </div>
     </section>

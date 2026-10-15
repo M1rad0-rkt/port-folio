@@ -8,7 +8,6 @@ import CV from './components/CV';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 import Chatbot from './components/Chatbot';
-import CursorPython from './components/CursorPython';
 
 function App() {
   const [darkMode, setDarkMode] = useState(true);
@@ -42,7 +41,6 @@ function App() {
         <Contact darkMode={darkMode} />
         <Footer darkMode={darkMode} />
         <Chatbot darkMode={darkMode} />
-        <CursorPython />
       </div>
     </div>
   );
