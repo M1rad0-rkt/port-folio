@@ -62,7 +62,6 @@ const SYSTEM_PROMPT = `Tu es l'assistant personnel de RAKOTONIAINA Mirado, sur s
 
 === PROJETS ===
 - Clientelia (projet phare) : plateforme gestion demandes clients + analyse satisfaction, JWT (React, Django, MySQL, Vite)
-- Comptoir E-commerce : Boutique en ligne polyvalente conçue pour s'adapter à différents types de marchés. Stack moderne avec authentification JWT, catalogue produits et parcours d'achat. Accent sur la scalabilité et une API claire.(React, FastAPI, PostgreSQL)
 - Assistant IA de Règlementation ARMP : RAG + LLM + NLP sur les textes des marchés publics (en cours / à venir)
 - Chatbot IA ARMP : aide à l'inscription et à l'utilisation des sites ARMP (Python, TensorFlow, NLP)
 - Tera-project : analyse qualité de l'air à Fianarantsoa (Python, Pandas, Streamlit, Matplotlib)
@@ -218,6 +217,7 @@ export default function Chatbot({ darkMode }) {
   const [loading, setLoading] = useState(false);
   const bottomRef = useRef(null);
   const inputRef = useRef(null);
+  const dialogRef = useRef(null);
   const messagesRef = useRef(messages);
 
   useEffect(() => {
@@ -228,8 +228,42 @@ export default function Chatbot({ darkMode }) {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, loading]);
 
+  // Sur mobile, on ne met pas le focus tout de suite : le clavier cacherait la conversation.
   useEffect(() => {
-    if (open) inputRef.current?.focus();
+    if (open && window.matchMedia('(min-width: 640px)').matches) inputRef.current?.focus();
+  }, [open]);
+
+  // Sur mobile, la fenêtre prend tout l'écran : on bloque le défilement de la page et on suit
+  // la hauteur réellement visible (le clavier la réduit).
+  useEffect(() => {
+    if (!open) return undefined;
+    const small = window.matchMedia('(max-width: 639px)');
+    const vv = window.visualViewport;
+    const previousOverflow = document.body.style.overflow;
+
+    const fit = () => {
+      const dialog = dialogRef.current;
+      if (!dialog) return;
+      if (small.matches && vv) {
+        dialog.style.height = `${vv.height}px`;
+        dialog.style.top = `${vv.offsetTop}px`;
+      } else {
+        dialog.style.height = '';
+        dialog.style.top = '';
+      }
+    };
+
+    if (small.matches) document.body.style.overflow = 'hidden';
+    fit();
+    vv?.addEventListener('resize', fit);
+    vv?.addEventListener('scroll', fit);
+    window.addEventListener('resize', fit);
+    return () => {
+      vv?.removeEventListener('resize', fit);
+      vv?.removeEventListener('scroll', fit);
+      window.removeEventListener('resize', fit);
+      document.body.style.overflow = previousOverflow;
+    };
   }, [open]);
 
   useEffect(() => {
@@ -301,35 +335,49 @@ export default function Chatbot({ darkMode }) {
           type="button"
           onClick={() => setOpen(true)}
           aria-label="Ouvrir le chat : une question ? Demande-moi !"
-          className={`fixed bottom-[9.75rem] right-5 z-50 block h-24 w-40 transition-transform hover:scale-105 motion-reduce:transition-none ${focusRing}`}
+          className={`fixed bottom-[9.75rem] right-5 z-50 block h-24 w-40 transition-transform motion-reduce:transition-none [@media(hover:hover)]:hover:scale-105 ${focusRing}`}
         >
           <svg viewBox="0 0 160 96" className="size-full overflow-visible" aria-hidden="true">
             <path
               d="M34 62 A15 15 0 0 1 28 36 A17 17 0 0 1 52 16 A21 21 0 0 1 88 10 A18 18 0 0 1 120 20 A17 17 0 0 1 134 46 A16 16 0 0 1 118 66 A22 22 0 0 1 84 70 A22 22 0 0 1 56 68 A16 16 0 0 1 34 62 Z"
-              strokeWidth="2.5"
+              strokeWidth="2"
               strokeLinejoin="round"
-              className={isDark ? 'fill-black stroke-gray-700' : 'fill-white stroke-gray-900'}
+              className={
+                isDark
+                  ? 'fill-transparent stroke-white/70'
+                  : 'fill-transparent stroke-gray-900/60'
+              }
             />
             <ellipse
               cx="122"
               cy="82"
               rx="6"
               ry="4.5"
-              strokeWidth="2.5"
-              className={isDark ? 'fill-black stroke-gray-700' : 'fill-white stroke-gray-900'}
+              strokeWidth="2"
+              className={
+                isDark
+                  ? 'fill-transparent stroke-white/70'
+                  : 'fill-transparent stroke-gray-900/60'
+              }
             />
             <ellipse
               cx="128"
               cy="92"
               rx="3.5"
               ry="2.8"
-              strokeWidth="2.5"
-              className={isDark ? 'fill-black stroke-gray-700' : 'fill-white stroke-gray-900'}
+              strokeWidth="2"
+              className={
+                isDark
+                  ? 'fill-transparent stroke-white/70'
+                  : 'fill-transparent stroke-gray-900/60'
+              }
             />
           </svg>
           <span
             className={`absolute inset-x-0 top-0 grid h-20 place-items-center px-6 text-center text-xs font-medium leading-tight ${
-              isDark ? 'text-white' : 'text-gray-900'
+              isDark
+                ? 'text-white [text-shadow:0_0_8px_rgba(0,0,0,0.95),0_0_2px_rgba(0,0,0,0.9)]'
+                : 'text-gray-900 [text-shadow:0_0_8px_rgba(255,255,255,0.95),0_0_2px_rgba(255,255,255,0.9)]'
             }`}
           >
             Une question ?<br />
@@ -340,16 +388,17 @@ export default function Chatbot({ darkMode }) {
 
       {open && (
         <div
+          ref={dialogRef}
           role="dialog"
           aria-label="Assistant de Mirado"
-          className={`fixed bottom-40 right-6 z-50 flex h-[70vh] max-h-[520px] w-[calc(100vw-3rem)] max-w-[380px] flex-col overflow-hidden rounded-3xl border shadow-2xl ${
+          className={`fixed inset-x-0 top-0 z-50 flex h-dvh flex-col overflow-hidden shadow-2xl sm:inset-x-auto sm:bottom-40 sm:right-6 sm:top-auto sm:h-[70vh] sm:max-h-[520px] sm:w-[380px] sm:rounded-3xl sm:border ${
             isDark
               ? 'border-gray-800 bg-black text-white shadow-black/40'
               : 'border-gray-200 bg-white text-gray-900 shadow-black/15'
           }`}
         >
           <div
-            className={`flex items-center gap-3 border-b px-5 py-4 ${
+            className={`flex items-center gap-3 border-b px-5 py-4 pt-[max(1rem,env(safe-area-inset-top))] ${
               isDark ? 'border-gray-800 bg-black' : 'border-gray-200 bg-white'
             }`}
           >
@@ -365,16 +414,26 @@ export default function Chatbot({ darkMode }) {
                 Pose une question sur mon parcours
               </p>
             </div>
+            <button
+              type="button"
+              onClick={() => setOpen(false)}
+              aria-label="Fermer le chat"
+              className={`grid size-10 shrink-0 place-items-center rounded-xl sm:hidden ${
+                isDark ? 'text-gray-300 hover:bg-gray-900' : 'text-gray-600 hover:bg-gray-100'
+              } ${focusRing}`}
+            >
+              <X size={20} aria-hidden="true" />
+            </button>
           </div>
 
           <div
-            className={`flex-1 space-y-3 overflow-y-auto px-5 py-4 ${isDark ? 'bg-black' : 'bg-white'}`}
+            className={`flex-1 space-y-3 overflow-y-auto overscroll-contain px-4 py-4 sm:px-5 ${isDark ? 'bg-black' : 'bg-white'}`}
             aria-live="polite"
           >
             {messages.map((msg, i) => (
               <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                 <div
-                  className={`max-w-[85%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed ${
+                  className={`max-w-[85%] rounded-2xl px-3.5 py-2.5 text-[15px] leading-relaxed sm:text-sm ${
                     msg.role === 'user'
                       ? 'rounded-br-md bg-blue-600 text-white'
                       : isDark
@@ -413,7 +472,7 @@ export default function Chatbot({ darkMode }) {
                     key={s}
                     type="button"
                     onClick={() => send(s)}
-                    className={`rounded-full border px-3 py-1.5 text-xs font-medium transition-colors ${focusRing} ${
+                    className={`rounded-full border px-3.5 py-2 text-[13px] font-medium transition-colors sm:px-3 sm:py-1.5 sm:text-xs ${focusRing} ${
                       isDark
                         ? 'border-gray-800 text-gray-300 hover:border-blue-500 hover:text-blue-400'
                         : 'border-gray-300 text-gray-700 hover:bg-gray-100'
@@ -430,7 +489,7 @@ export default function Chatbot({ darkMode }) {
 
           <form
             onSubmit={onSubmit}
-            className={`flex items-center gap-2 border-t px-4 py-3 ${
+            className={`flex items-center gap-2 border-t px-4 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] ${
               isDark ? 'border-gray-800 bg-black' : 'border-gray-200 bg-white'
             }`}
           >
@@ -442,7 +501,7 @@ export default function Chatbot({ darkMode }) {
               placeholder="Ta question…"
               aria-label="Ta question"
               disabled={loading}
-              className={`min-w-0 flex-1 rounded-xl border px-3.5 py-2.5 text-sm outline-none transition-colors ${
+              className={`min-w-0 flex-1 rounded-xl border px-3.5 py-3 text-base outline-none transition-colors sm:py-2.5 sm:text-sm ${
                 isDark
                   ? 'border-gray-800 bg-gray-950 text-white placeholder:text-gray-500 focus:border-blue-500'
                   : 'border-gray-300 bg-transparent text-gray-900 placeholder:text-gray-400 focus:border-blue-600'
@@ -452,7 +511,7 @@ export default function Chatbot({ darkMode }) {
               type="submit"
               disabled={loading || !input.trim()}
               aria-label="Envoyer"
-              className={`grid size-10 shrink-0 place-items-center rounded-xl bg-blue-600 text-white shadow-lg shadow-blue-600/25 transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-40 ${focusRing}`}
+              className={`grid size-11 shrink-0 place-items-center rounded-xl bg-blue-600 text-white shadow-lg shadow-blue-600/25 transition-colors hover:bg-blue-700 sm:size-10 disabled:cursor-not-allowed disabled:opacity-40 ${focusRing}`}
             >
               <Send size={16} aria-hidden="true" />
             </button>
