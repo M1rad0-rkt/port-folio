@@ -32,6 +32,7 @@ function TerminalFrame() {
   const [charIndex, setCharIndex] = useState(0);
   const [cycle, setCycle] = useState(0);
   const bottomRef = useRef(null);
+  const bodyRef = useRef(null);
 
   useEffect(() => {
     if (reducedMotion()) {
@@ -71,8 +72,11 @@ function TerminalFrame() {
     return () => clearTimeout(t);
   }, [visibleCount, charIndex, cycle]);
 
+  // Scroll uniquement DANS le terminal (pas la page)
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    const el = bodyRef.current;
+    if (!el) return;
+    el.scrollTop = el.scrollHeight;
   }, [visibleCount, charIndex]);
 
   const rendered = TERMINAL_LINES.slice(0, visibleCount + 1);
@@ -92,8 +96,11 @@ function TerminalFrame() {
         </span>
       </div>
 
-      {/* Corps */}
-      <div className="h-64 overflow-hidden p-4 font-mono text-[12px] leading-relaxed sm:h-72 sm:text-[13px]">
+      {/* Corps — overflow interne seulement */}
+      <div
+        ref={bodyRef}
+        className="h-64 overflow-y-auto overflow-x-hidden p-4 font-mono text-[12px] leading-relaxed sm:h-72 sm:text-[13px]"
+      >
         {rendered.map((line, i) => {
           const isCurrent = i === visibleCount;
           const isCmd = line.type === 'cmd';
