@@ -21,3 +21,8 @@ dist-ssr
 *.sln
 *.sw?
 .env
+
+# Environnement Python local (ne pas versionner)
+venv/
+.venv/
+__pycache__/

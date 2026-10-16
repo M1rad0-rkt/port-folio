@@ -20,13 +20,13 @@ const skillCategories = [
     icon: Globe2,
     title: 'Développement web',
     level: 'Frontend & backend',
-    skills: ['HTML5', 'CSS3', 'React / Vite', 'Django', 'Tailwind CSS'],
+    skills: ['HTML5', 'CSS3', 'React / Vite', 'Django', 'FastAPI' ,'Tailwind CSS'],
   },
   {
     icon: Database,
     title: 'Bases de données',
     level: 'Stockage & requêtes',
-    skills: ['PostgreSQL', 'MySQL', 'SQL'],
+    skills: ['PostgreSQL', 'MySQL'],
   },
   {
     icon: BarChart4,

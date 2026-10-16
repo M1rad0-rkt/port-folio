@@ -235,7 +235,7 @@ function ProjectModal({ project, index, total, onClose, onPrev, onNext }) {
         className="relative max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-3xl border border-gray-200 bg-white text-gray-900 shadow-2xl dark:border-gray-800 dark:bg-gray-950 dark:text-white"
       >
         <div className="relative h-52 overflow-hidden bg-gray-100 sm:h-72 dark:bg-gray-900">
-          <img src={project.image} alt="" onError={hideBroken} className="size-full object-cover" />
+          <img src={project.image} alt={`Capture du projet ${project.title}`} onError={hideBroken} className="size-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-t from-gray-950 via-gray-950/30 to-transparent" />
 
           <button
@@ -382,7 +382,7 @@ function ProjectRow({ project, index, active, onActivate, onOpen }) {
           <div className="relative mb-5 aspect-[16/10] overflow-hidden rounded-2xl border border-gray-200 bg-gray-100 lg:hidden dark:border-gray-800 dark:bg-gray-900">
             <img
               src={project.image}
-              alt=""
+              alt={`Aperçu du projet ${project.title}`}
               loading="lazy"
               onError={hideBroken}
               className="size-full object-cover"

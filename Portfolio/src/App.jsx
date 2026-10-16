@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, lazy, Suspense } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import About from './components/About';
@@ -7,7 +7,8 @@ import Projects from './components/Projects';
 import CV from './components/CV';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
-import Chatbot from './components/Chatbot';
+// Chargé à la demande : le SDK Gemini n'alourdit plus le premier affichage
+const Chatbot = lazy(() => import('./components/Chatbot'));
 
 function App() {
   const [darkMode, setDarkMode] = useState(true);
@@ -40,7 +41,9 @@ function App() {
         <CV darkMode={darkMode} />
         <Contact darkMode={darkMode} />
         <Footer darkMode={darkMode} />
-        <Chatbot darkMode={darkMode} />
+        <Suspense fallback={null}>
+          <Chatbot darkMode={darkMode} />
+        </Suspense>
       </div>
     </div>
   );

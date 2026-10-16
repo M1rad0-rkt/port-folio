@@ -26,6 +26,8 @@ export default function About({ darkMode }) {
                 darkMode ? 'border-gray-800' : 'border-gray-200'
               }`}>
                 <div
+                  role="img"
+                  aria-label="Portrait de Mirado Rakotoniaina, étudiant en Data et Intelligence Artificielle"
                   className="w-full aspect-[4/5] bg-cover bg-center"
                   style={{ backgroundImage: "url('/mirado1.jpg')" }}
                 />
